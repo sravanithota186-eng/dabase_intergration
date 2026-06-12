@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gene Database</title>
+</head>
+<body>
+
+<h2>Gene Entry Form</h2>
+
+<form id="geneForm">
+
+    <input
+        type="text"
+        id="geneName"
+        placeholder="Gene Name">
+
+    <br><br>
+
+    <input
+        type="text"
+        id="sequence"
+        placeholder="Sequence">
+
+    <br><br>
+
+    <button type="submit">
+        Save Gene
+    </button>
+
+</form>
+
+<hr>
+
+<button onclick="loadGenes()">
+    Show Genes
+</button>
+
+<ul id="geneList"></ul>
+
+<script>
+
+const form =
+document.getElementById("geneForm");
+
+form.addEventListener("submit", function(e){
+
+    e.preventDefault();
+
+    const geneName =
+    document.getElementById("geneName").value;
+
+    const sequence =
+    document.getElementById("sequence").value;
+
+    fetch("/add-gene",{
+
+        method:"POST",
+
+        headers:{
+            "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+            geneName,
+            sequence
+        })
+
+    })
+    .then(res=>res.text())
+    .then(data=>alert(data));
+
+});
+
+
+function loadGenes(){
+
+    fetch("/genes")
+
+    .then(res=>res.json())
+
+    .then(data=>{
+
+        const geneList =
+        document.getElementById("geneList");
+
+        geneList.innerHTML = "";
+
+        data.forEach(gene=>{
+
+            const li =
+            document.createElement("li");
+
+            li.textContent =
+            gene.geneName + " : " + gene.sequence;
+
+            geneList.appendChild(li);
+
+        });
+
+    });
+
+}
+
+</script>
+
+</body>
+</html>

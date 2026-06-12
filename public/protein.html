@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Protein Database</title>
+</head>
+<body>
+
+<h2>Protein Database Application</h2>
+
+<input
+    type="text"
+    id="proteinName"
+    placeholder="Protein Name">
+
+<br><br>
+
+<input
+    type="text"
+    id="proteinFunction"
+    placeholder="Function">
+
+<br><br>
+
+<button onclick="addProtein()">
+    Submit
+</button>
+
+<p id="result"></p>
+
+<script>
+
+function addProtein() {
+
+    const proteinName =
+        document.getElementById("proteinName").value;
+
+    const proteinFunction =
+        document.getElementById("proteinFunction").value;
+
+    fetch("/add-protein", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+            proteinName,
+            proteinFunction
+        })
+
+    })
+
+    .then(response => response.text())
+
+    .then(data => {
+        document.getElementById("result").innerText = data;
+    });
+
+}
+
+</script>
+
+</body>
+</html>

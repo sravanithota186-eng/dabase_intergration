@@ -15,7 +15,7 @@ app.use(express.static("public"));
 const db = new sqlite3.Database("database.db");
 
 
-// Student Table
+// Q1 - Students Table
 db.run(`
 CREATE TABLE IF NOT EXISTS students(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -25,12 +25,22 @@ CREATE TABLE IF NOT EXISTS students(
 `);
 
 
-// Mutation Table
+// Q2 - Mutation Table
 db.run(`
 CREATE TABLE IF NOT EXISTS mutation(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     geneName TEXT,
     mutationType TEXT
+)
+`);
+
+
+// Q3 - Protein Table
+db.run(`
+CREATE TABLE IF NOT EXISTS protein(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    proteinName TEXT,
+    proteinFunction TEXT
 )
 `);
 
@@ -71,6 +81,27 @@ app.post("/add-mutation", (req, res) => {
             }
 
             res.send("Mutation Added Successfully");
+        }
+    );
+
+});
+
+
+// Q3 Route - Add Protein
+app.post("/add-protein", (req, res) => {
+
+    const { proteinName, proteinFunction } = req.body;
+
+    db.run(
+        "INSERT INTO protein(proteinName, proteinFunction) VALUES (?, ?)",
+        [proteinName, proteinFunction],
+        (err) => {
+
+            if (err) {
+                return res.send("Error");
+            }
+
+            res.send("Protein Added Successfully");
         }
     );
 

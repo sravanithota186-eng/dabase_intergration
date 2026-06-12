@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Student Form</title>
+</head>
+
+<body>
+
+    <h2>Add Student</h2>
+
+    <input type="text" id="name" placeholder="Student Name">
+    <br><br>
+
+    <input type="text" id="regno" placeholder="Register Number">
+    <br><br>
+
+    <button onclick="addStudent()">
+        Submit
+    </button>
+
+    <p id="result"></p>
+
+    <script>
+
+        function addStudent() {
+
+            const studentName =
+                document.getElementById("name").value;
+
+            const registerNumber =
+                document.getElementById("regno").value;
+
+            fetch("/add-student", {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                    studentName,
+                    registerNumber
+                })
+            })
+
+            .then(res => res.text())
+
+            .then(data => {
+                document.getElementById("result").innerText = data;
+            });
+
+        }
+
+    </script>
+
+</body>
+
+</html>

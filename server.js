@@ -11,11 +11,11 @@ app.use(bodyParser.json());
 app.use(express.static("public"));
 
 
-// Connect SQLite Database
+// Database Connection
 const db = new sqlite3.Database("database.db");
 
 
-// Create Table
+// Student Table
 db.run(`
 CREATE TABLE IF NOT EXISTS students(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -25,13 +25,23 @@ CREATE TABLE IF NOT EXISTS students(
 `);
 
 
-// POST API
+// Mutation Table
+db.run(`
+CREATE TABLE IF NOT EXISTS mutation(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    geneName TEXT,
+    mutationType TEXT
+)
+`);
+
+
+// Q1 Route - Add Student
 app.post("/add-student", (req, res) => {
 
     const { studentName, registerNumber } = req.body;
 
     db.run(
-        "INSERT INTO students(studentName, registerNumber) VALUES (?,?)",
+        "INSERT INTO students(studentName, registerNumber) VALUES (?, ?)",
         [studentName, registerNumber],
         (err) => {
 
@@ -42,6 +52,28 @@ app.post("/add-student", (req, res) => {
             res.send("Student Added Successfully");
         }
     );
+
+});
+
+
+// Q2 Route - Add Mutation
+app.post("/add-mutation", (req, res) => {
+
+    const { geneName, mutationType } = req.body;
+
+    db.run(
+        "INSERT INTO mutation(geneName, mutationType) VALUES (?, ?)",
+        [geneName, mutationType],
+        (err) => {
+
+            if (err) {
+                return res.send("Error");
+            }
+
+            res.send("Mutation Added Successfully");
+        }
+    );
+
 });
 
 

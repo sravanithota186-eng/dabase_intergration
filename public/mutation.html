@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gene Mutation Entry</title>
+</head>
+<body>
+
+<h2>Gene Mutation Entry System</h2>
+
+<input type="text"
+       id="geneName"
+       placeholder="Gene Name">
+
+<br><br>
+
+<input type="text"
+       id="mutationType"
+       placeholder="Mutation Type">
+
+<br><br>
+
+<button onclick="addMutation()">
+    Submit
+</button>
+
+<p id="result"></p>
+
+<script>
+
+function addMutation() {
+
+    const geneName =
+        document.getElementById("geneName").value;
+
+    const mutationType =
+        document.getElementById("mutationType").value;
+
+    fetch("/add-mutation", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+            geneName,
+            mutationType
+        })
+    })
+
+    .then(response => response.text())
+
+    .then(data => {
+        document.getElementById("result").innerText = data;
+    });
+
+}
+
+</script>
+
+</body>
+</html>
